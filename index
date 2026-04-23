@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Ejercicios 3D</title>
+<style>
+    body { margin: 0; overflow: hidden; background: #111; color: white; font-family: Arial; }
+    #info {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: rgba(0,0,0,0.5);
+        padding: 10px;
+        border-radius: 10px;
+    }
+</style>
+</head>
+<body>
+
+<div id="info">
+    <h3>Controles (Ejercicio 3)</h3>
+    <p>W/A/S/D: Mover</p>
+    <p>Q/E: Rotar</p>
+    <p>Z/X: Escalar</p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<script>
+// ESCENA
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer();
+
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+// CUBO
+const geometry = new THREE.BoxGeometry();
+const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+const cube = new THREE.Mesh(geometry, material);
+scene.add(cube);
+
+// CÁMARA
+camera.position.z = 5;
+
+// ===============================
+// PROPUESTA 1: TRASLACIÓN
+// ===============================
+let direction = 1;
+
+// ===============================
+// PROPUESTA 3: CONTROLES
+// ===============================
+document.addEventListener("keydown", (event) => {
+    switch(event.key.toLowerCase()){
+        case 'w': cube.position.y += 0.2; break;
+        case 's': cube.position.y -= 0.2; break;
+        case 'a': cube.position.x -= 0.2; break;
+        case 'd': cube.position.x += 0.2; break;
+        case 'q': cube.rotation.y += 0.2; break;
+        case 'e': cube.rotation.y -= 0.2; break;
+        case 'z': cube.scale.setScalar(cube.scale.x + 0.1); break;
+        case 'x': cube.scale.setScalar(cube.scale.x - 0.1); break;
+    }
+});
+
+// ANIMACIÓN
+function animate() {
+    requestAnimationFrame(animate);
+
+    // ===============================
+    // PROPUESTA 1: TRASLACIÓN EN X
+    // ===============================
+    cube.position.x += 0.02 * direction;
+
+    if(cube.position.x > 3 || cube.position.x < -3){
+        direction *= -1;
+    }
+
+    // ===============================
+    // PROPUESTA 2: ROTACIÓN
+    // ===============================
+    cube.rotation.x += 0.01;
+    cube.rotation.y += 0.01;
+
+    renderer.render(scene, camera);
+}
+
+animate();
+</script>
+
+</body>
+</html>
